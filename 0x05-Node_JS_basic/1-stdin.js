@@ -10,6 +10,7 @@ const r1 = readline.createInterface({
 
 console.log('Welcome to Holberton School, what is your name?');
 r1.on('line', (name) => {
+  name = name.trim();
   console.log(`Your name is: ${name}`);
 });
 r1.on('close', () => {
