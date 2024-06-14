@@ -26,7 +26,7 @@ const app = http.createServer((req, res) => {
         const students = data.split('\n').filter((line) => line.trim() !== '');
         const studentFields = students.shift().split(',');
 
-        const studentList = students.map(line => {
+        const studentList = students.map((line) => {
           const details = line.split(',');
           const student = {};
           studentFields.forEach((field, index) => {
@@ -45,7 +45,7 @@ const app = http.createServer((req, res) => {
             fieldCounts[field] = 0;
             studentNamesByField[field] = [];
           }
-          fieldCounts[field] = fieldCounts[field] + 1;
+          fieldCounts[field] += 1;
           studentNamesByField[field].push(student.firstname);
         });
 
