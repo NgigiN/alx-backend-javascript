@@ -1,7 +1,7 @@
 // Tests using chai for my advanced calc function
 
-import { expect } from 'chai';
-import calculateNumber from './1-calcul';
+const expect = require('chai').expect;
+const calculateNumber = require('./2-calcul_chai');
 
 describe('calculateNumber', () => {
   describe('SUM operation', () => {
