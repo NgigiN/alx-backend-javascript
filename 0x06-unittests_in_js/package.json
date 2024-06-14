@@ -1,0 +1,11 @@
+{
+  "name": "unittests_for_js",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "mocha": "^10.4.0"
+  }
+}
