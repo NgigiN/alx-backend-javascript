@@ -89,7 +89,7 @@ describe('calculateNumber', () => {
     });
 
     it('should handle division by zero correctly', () => {
-      assert.strictEqual(calculateNumber('DIVIDE', 1.7, 0), `'Error'`);
+      assert.strictEqual(calculateNumber('DIVIDE', 1.7, 0), 'Error');
     });
 
     it('should handle division of negative numbers correctly', () => {
@@ -102,6 +102,22 @@ describe('calculateNumber', () => {
 
     it('should handle division of a positive number by a negative number correctly', () => {
       assert.strictEqual(calculateNumber('DIVIDE', 12, -4), -3);
+    });
+
+    it('it should return the right number', () => {
+      assert.equal(calculateNumber('DIVIDE', 10.3, 2), 5);
+      assert.equal(calculateNumber('DIVIDE', 10, 1.2), 10);
+      assert.equal(calculateNumber('DIVIDE', 10.3, 1.3), 10);
+      assert.equal(calculateNumber('DIVIDE', 10.7, 1.2), 11);
+      assert.equal(calculateNumber('DIVIDE', 10.3, 1.8), 5);
+      assert.equal(calculateNumber('DIVIDE', 10.6, 1.8), 5.5);
+    });
+
+    it('it should return Error if b is equal to 0', () => {
+      assert.equal(calculateNumber('DIVIDE', 10.3, 0).toLowerCase(), 'error');
+      assert.equal(calculateNumber('DIVIDE', 10.7, 0).toLowerCase(), 'error');
+      assert.equal(calculateNumber('DIVIDE', 10.3, 0.3).toLowerCase(), 'error');
+      assert.equal(calculateNumber('DIVIDE', 10.7, 0.2).toLowerCase(), 'error');
     });
   });
 });
