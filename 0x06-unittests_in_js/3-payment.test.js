@@ -1,9 +1,9 @@
 // Tests for the SendPaymentRequestToApi function
 
+const sinon = require('sinon');
+const { expect } = require('chai');
 const sendPaymentRequestToApi = require('./3-payment').sendPaymentRequestToApi;
 const calculateNumber = require('./utils').calculateNumber;
-const sinon = require('sinon');
-const expect = require('chai').expect;
 
 describe('sendPaymentRequestToApi', () => {
   it('sendPaymentRequestToApi uses the calculate method of utils', () => {
