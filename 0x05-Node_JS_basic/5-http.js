@@ -23,7 +23,7 @@ const app = http.createServer((req, res) => {
         res.end('This is the list of our students\nCannot load the database');
       } else {
         // Process the CSV data
-        const students = data.split('\n').filter(line => line.trim() !== '');
+        const students = data.split('\n').filter((line) => line.trim() !== '');
         const studentFields = students.shift().split(',');
 
         const studentList = students.map(line => {
@@ -45,7 +45,7 @@ const app = http.createServer((req, res) => {
             fieldCounts[field] = 0;
             studentNamesByField[field] = [];
           }
-          fieldCounts[field]++;
+          fieldCounts[field] = fieldCounts[field] + 1;
           studentNamesByField[field].push(student.firstname);
         });
 
