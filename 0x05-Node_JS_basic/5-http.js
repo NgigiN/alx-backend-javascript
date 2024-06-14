@@ -3,61 +3,74 @@ const fs = require('fs');
 
 const PORT = 1245;
 const HOST = 'localhost';
-const app = http.createServer();
-app.on('request', (req, res) => {
-  const responseTxt = 'Hello Holberton School!';
+const app = http.createServer((req, res) => {
   const dbPath = process.argv[2];
-  const students = [];
-  const fields = {};
-  const fieldsArray = [];
-  const csv = [];
-  const csvArray = [];
-  let csvString = '';
 
   if (req.url === '/') {
+    // Respond with the welcome message
+    const responseTxt = 'Hello Holberton School!';
     res.setHeader('Content-Type', 'text/plain');
-    res.setHeader('Content-Header', responseTxt.length);
     res.statusCode = 200;
-    res.write(Buffer.from(responseTxt));
+    res.end(responseTxt);
   } else if (req.url === '/students') {
+    // Respond with the student list
     fs.readFile(dbPath, 'utf-8', (err, data) => {
+      res.setHeader('Content-Type', 'text/plain');
+
       if (err) {
-        res.setHeader('Content-Type', 'text/plain');
-        res.statusCode = 404;
-        res.write('This is the list of students\n');
-        res.write('Cannot load the database');
+        // Handle error reading the file
+        res.statusCode = 500;
+        res.end('This is the list of our students\nCannot load the database');
       } else {
-        res.setHeader('Content-Type', 'text/plain');
+        // Process the CSV data
+        const students = data.split('\n').filter(line => line.trim() !== '');
+        const studentFields = students.shift().split(',');
+
+        const studentList = students.map(line => {
+          const details = line.split(',');
+          const student = {};
+          studentFields.forEach((field, index) => {
+            student[field.trim()] = details[index].trim();
+          });
+          return student;
+        });
+
+        // Count and group students by field
+        const fieldCounts = {};
+        const studentNamesByField = {};
+
+        studentList.forEach((student) => {
+          const { field } = student;
+          if (!fieldCounts[field]) {
+            fieldCounts[field] = 0;
+            studentNamesByField[field] = [];
+          }
+          fieldCounts[field]++;
+          studentNamesByField[field].push(student.firstname);
+        });
+
+        // Write the response with the student details
         res.statusCode = 200;
-        res.write('This is the list of students\n');
-        csvString = data.toString();
-        csvArray.push(csvString.split('\n'));
-        for (const line of csvArray[0]) {
-          csv.push(line.split(','));
+        res.write('This is the list of our students\n');
+        res.write(`Number of students: ${students.length}\n`);
+
+        for (const [field, count] of Object.entries(fieldCounts)) {
+          res.write(`Number of students in ${field}: ${count}. List: ${studentNamesByField[field].join(', ')}\n`);
         }
-        for (const field of csv[0]) {
-          fieldsArray.push(field);
-        }
-        for (const line of csv.slice(1)) {
-          for (const field of line) {
-            fields[fieldsArray[line.indexOf(field)]] = field;
-          }
-          students.push(fields);
-        }
-        for (const student of students) {
-          res.write(`Number: ${student.id}\n`);
-          res.write(`Name: ${student.firstname} ${student.lastname}\n`);
-          if (student.location) {
-            res.write(`Location: ${student.location}\n`);
-          }
-          res.write('\n');
-        }
+
+        res.end();
       }
-      res.end();
     });
+  } else {
+    // Handle other paths
+    res.setHeader('Content-Type', 'text/plain');
+    res.statusCode = 404;
+    res.end('Not Found');
   }
 });
+
 app.listen(PORT, HOST, () => {
-  process.stdout.write(`Server listening at -> http://${HOST}:${PORT}\n`);
+  console.log(`Server listening at -> http://${HOST}:${PORT}`);
 });
+
 module.exports = app;
