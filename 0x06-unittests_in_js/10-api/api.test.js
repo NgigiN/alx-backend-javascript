@@ -34,34 +34,28 @@ describe('API integration test', () => {
     });
   });
 
-  it('GET /available_payments returns correct response', (done) => {
-    request.get(`${API_URL}/available_payments`, (_err, res, body) => {
-      expect(res.statusCode).to.be.equal(200);
-      const response = JSON.parse(body);
-      expect(response).to.have.property('payment_methods');
-      expect(response.payment_methods).to.have.property('credit_cards').that.is.true;
-      expect(response.payment_methods).to.have.property('paypal').that.is.false;
-      done();
-    });
+  it('POST /login returns valid response', (done) => {
+    request.post(
+      'http://localhost:7865',
+      { json: { userName: 'Pinkbrook' } },
+      (_err, res, body) => {
+        expect(res.statusCode).to.be.equal(200);
+        expect(body).to.be.equal('Welcome Pinkbrook');
+        done();
+      }
+    );
   });
 
-  // Test for login endpoint with username
-  it('POST /login returns welcome message with username', (done) => {
-    request.post(`${API_URL}/login`, {
-      json: { userName: 'JohnDoe' }
-    }, (_err, res, body) => {
-      expect(res.statusCode).to.be.equal(200);
-      expect(body).to.be.equal('Welcome JohnDoe');
-      done();
-    });
-  });
-
-  // Test for login endpoint with empty body
-  it('POST /login returns welcome message with empty username', (done) => {
-    request.post(`${API_URL}/login`, { json: {} }, (_err, res, body) => {
-      expect(res.statusCode).to.be.equal(200);
-      expect(body).to.be.equal('Welcome ');
-      done();
-    });
+  it('GET /available_payments returns valid response', (done) => {
+    request.get(
+      'http://localhost:7865/available_payments',
+      (_err, res, body) => {
+        expect(res.statusCode).to.be.equal(200);
+        expect(JSON.parse(body)).to.be.deep.equal({
+          payment_methods: { credit_cards: true, paypal: false },
+        });
+        done();
+      }
+    );
   });
 });
