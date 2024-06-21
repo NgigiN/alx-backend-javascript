@@ -36,7 +36,7 @@ describe('API integration test', () => {
 
   it('POST /login returns valid response', (done) => {
     request.post(
-      'http://localhost:7865',
+      'http://localhost:7865/login',
       { json: { userName: 'Pinkbrook' } },
       (_err, res, body) => {
         expect(res.statusCode).to.be.equal(200);
