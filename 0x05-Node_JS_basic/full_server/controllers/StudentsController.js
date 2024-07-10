@@ -3,7 +3,7 @@ const readDatabase = require('../utils');
 const VALID_MAJORS = ['CS', 'SWE'];
 
 class StudentController {
-  static getAllStudents (request, response) {
+  static getAllStudents(request, response) {
     const dataPath = process.argv.length > 2 ? process.argv[2] : '';
 
     readDatabase(dataPath)
@@ -26,7 +26,7 @@ class StudentController {
           responsePart.push([
             `Number of students in ${field}: ${group.length}.`,
             'List:',
-            group.join(', ')
+            group.join(', '),
           ].join(' '));
         }
         response.status(200).send(responsePart.join('\n'));
@@ -38,7 +38,7 @@ class StudentController {
       });
   }
 
-  static getAllStudentsByMajor (request, response) {
+  static getAllStudentsByMajor(request, response) {
     const dataPath = process.argv.length > 2 ? process.argv[2] : '';
     const { major } = request.params;
 
