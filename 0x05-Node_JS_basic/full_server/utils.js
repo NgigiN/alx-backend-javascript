@@ -28,7 +28,7 @@ const readDatabase = (dataPath) => new Promise((resolve, reject) => {
 
       if (!Object.keys(studentGroups).includes(field)) {
         studentGroups[field] = [];
-      }
+      };
 
       const studentEntries = studentPropNames.map((propName, idx) => [
         propName,
